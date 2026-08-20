@@ -6,13 +6,15 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
+    "prestart": "prisma migrate deploy",
     "dev": "nodemon src/server.js",
     "seed": "node ./prisma/seed.js",
     "build": "prisma generate",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "migrate:deploy": "prisma migrate deploy"
   },
   "engines": {
-    "node": ">=23.6.0"
+    "node": ">=22.6.0"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
