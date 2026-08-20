@@ -10,11 +10,34 @@ import applicationRoutes from "./routes/applicationRoutes.js";
 const app = express()
 const port = process.env.PORT || 5000
 
+const clientUrls = process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(",").map((url) => url.trim().replace(/\/$/, ""))
+    : [];
+
+const allowedOrigins = [
+    "https://job-flow-ava5.onrender.com",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:5173",
+    ...clientUrls,
+];
+
 app.use(express.json())
-app.use(cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
-    credentials: true
-}))
+app.use(
+    cors({
+        origin: (origin, callback) => {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error(`CORS origin not allowed: ${origin}`));
+            }
+        },
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    })
+)
 app.use(cookieParser())
 
 dbConnect()

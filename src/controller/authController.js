@@ -78,11 +78,12 @@ const login = async (req, res) => {
 // logOut
 const LogOut=async(req,res)=>{
     try {
-        res.clearCookie('jobflow_token',{
-            httpOnly:true,
-            sameSite:'strict',
-            secure:process.env.NODE_ENV !== 'development',
-            expires:new Date(0)
+        const isProduction = process.env.NODE_ENV === "production";
+        res.clearCookie("jobflow_token", {
+            httpOnly: true,
+            sameSite: isProduction ? "none" : "lax",
+            secure: isProduction,
+            expires: new Date(0),
         })
         res.status(200).json({ message: 'User logged out successfully' })
     } catch (error) {
