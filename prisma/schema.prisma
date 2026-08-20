@@ -1,0 +1,119 @@
+generator client {
+  provider               = "prisma-client"
+  output                 = "../src/generated/prisma"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Stage {
+  SAVED
+  APPLIED
+  SCREENING
+  INTERVIEW
+  OFFER
+  ACCEPTED
+}
+
+enum Source {
+  Referral
+  LinkedIn
+  Company_site @map("Company site")
+  Job_board    @map("Job board")
+  Cold_email   @map("Cold email")
+  Recruiter
+  Other
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TimelineType {
+  stage
+  note
+  interview
+}
+
+model User {
+  id                String        @id @default(uuid())
+  name              String
+  email             String        @unique
+  passwordHash      String        @map("password_hash")
+  targetRole        String?       @map("target_role")
+  preferredLocation String?       @map("preferred_location")
+  salaryExpectation String?       @map("salary_expectation")
+  notifyFollowUps   Boolean       @default(true) @map("notify_follow_ups")
+  notifyInterviews  Boolean       @default(true) @map("notify_interviews")
+  weeklyDigest      Boolean       @default(false) @map("weekly_digest")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+  applications      Application[]
+
+  @@map("users")
+}
+
+model Application {
+  id             String          @id @default(uuid())
+  userId         String          @map("user_id")
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company        String
+  role           String
+  location       String          @default("")
+  salary         String          @default("")
+  source         Source
+  stage          Stage
+  priority       Priority        @default(MEDIUM)
+  link           String          @default("")
+  notes          String          @default("")
+  appliedAt      DateTime        @default(now()) @map("applied_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  interviews     Interview[]
+  reminders      Reminder[]
+  timelineEvents TimelineEvent[]
+
+  @@index([userId])
+  @@index([stage])
+  @@map("applications")
+}
+
+model Interview {
+  id            String      @id @default(uuid())
+  applicationId String      @map("application_id")
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  kind          String
+  withWhom      String      @default("TBD") @map("with_whom")
+  at            DateTime
+
+  @@index([applicationId])
+  @@map("interviews")
+}
+
+model Reminder {
+  id            String      @id @default(uuid())
+  applicationId String      @map("application_id")
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  label         String
+  at            DateTime
+  done          Boolean     @default(false)
+
+  @@index([applicationId])
+  @@map("reminders")
+}
+
+model TimelineEvent {
+  id            String        @id @default(uuid())
+  applicationId String        @map("application_id")
+  application   Application   @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  at            DateTime      @default(now())
+  label         String
+  type          TimelineType?
+
+  @@map("timeline_events")
+}

@@ -1,0 +1,34 @@
+{
+  "name": "jobflow-server",
+  "version": "1.0.0",
+  "description": "JobFlow backend - Express 5 + Prisma 7 API",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "seed": "node ./prisma/seed.js",
+    "build": "prisma generate",
+    "postinstall": "prisma generate"
+  },
+  "engines": {
+    "node": ">=23.6.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.23.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vercel/node": "^5.10.1",
+    "nodemon": "^3.1.14",
+    "prisma": "^7.9.1"
+  }
+}
