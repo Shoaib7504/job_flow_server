@@ -17,6 +17,8 @@ enum Stage {
   INTERVIEW
   OFFER
   ACCEPTED
+  REJECTED
+  WITHDRAWN
 }
 
 enum Source {

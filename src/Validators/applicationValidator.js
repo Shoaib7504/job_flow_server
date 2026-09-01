@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const STAGES = ["SAVED", "APPLIED", "SCREENING", "INTERVIEW", "OFFER", "ACCEPTED"];
+const STAGES = ["SAVED", "APPLIED", "SCREENING", "INTERVIEW", "OFFER", "ACCEPTED", "REJECTED", "WITHDRAWN"];
 const SOURCES = ["Referral", "LinkedIn", "Company site", "Job board", "Cold email", "Recruiter", "Other"];
 const PRIORITIES = ["LOW", "MEDIUM", "HIGH"];
 

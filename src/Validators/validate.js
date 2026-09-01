@@ -5,7 +5,7 @@ export const validate = (schema, source = "body") => (req, res, next) => {
       success: false,
       statusCode: 400,
       message: "Validation failed",
-      errors: result.error.errors.map((e) => ({
+      errors: result.error.issues.map((e) => ({
         field: e.path.join("."),
         message: e.message,
       })),

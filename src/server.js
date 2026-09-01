@@ -7,8 +7,9 @@ import { pathToFileURL } from "node:url";
 import { dbConnect, dbClose } from "./config/db.connect.js";
 import authRoutes from "./routes/authRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
-const app = express()
-const port = process.env.PORT || 5000
+const app = express();
+const port = process.env.PORT || 5000;
+
 
 const clientUrls = process.env.CLIENT_URL
     ? process.env.CLIENT_URL.split(",").map((url) => url.trim().replace(/\/$/, ""))
